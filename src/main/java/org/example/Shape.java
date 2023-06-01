@@ -11,9 +11,9 @@ import org.example.shapes.Square;
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = Circle.class, name = "circle"),
-        @JsonSubTypes.Type(value = Rectangle.class, name = "rectangle"),
-        @JsonSubTypes.Type(value = Square.class, name = "square")
+        @JsonSubTypes.Type(value = Square.class, name = "Square"),
+        @JsonSubTypes.Type(value = Circle.class, name = "Circle"),
+        @JsonSubTypes.Type(value = Rectangle.class, name = "Rectangle"),
 })
 public abstract class Shape {
     public abstract double getArea();
