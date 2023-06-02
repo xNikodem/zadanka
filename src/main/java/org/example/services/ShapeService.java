@@ -1,9 +1,7 @@
 package org.example.services;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.example.Shape;
 import org.example.ShapeList;
@@ -11,11 +9,17 @@ import org.example.ShapeList;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
 public class ShapeService {
+    private final ObjectMapper mapper;
+
+    public ShapeService(ObjectMapper mapper) {
+        this.mapper = mapper;
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.activateDefaultTypingAsProperty(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, "@type");
+    }
     public Shape findShapeWithLargestArea(List<Shape> shapes) {
         return shapes.stream().max(Comparator.comparing(Shape::getArea)).orElse(null);
     }
@@ -29,7 +33,6 @@ public class ShapeService {
     }
 
     public void exportShapesToJson(List<Shape> shapes, String path) {
-        ObjectMapper mapper = new ObjectMapper();
         ShapeList shapeList = new ShapeList(shapes);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.activateDefaultTypingAsProperty(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, "@type");
@@ -41,7 +44,6 @@ public class ShapeService {
     }
 
     public List<Shape> importShapesFromJson(String path) {
-        ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         mapper.activateDefaultTypingAsProperty(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, "@type");
         try {

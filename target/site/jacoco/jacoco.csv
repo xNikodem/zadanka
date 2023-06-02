@@ -1,0 +1,8 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+zadanka,org.example.services,ShapeService,16,101,0,0,5,21,0,5,0,5
+zadanka,org.example.shapes,Circle,13,22,0,0,6,6,3,4,3,4
+zadanka,org.example.shapes,Square,13,20,0,0,6,6,3,4,3,4
+zadanka,org.example.shapes,Rectangle,19,29,0,0,8,8,4,5,4,5
+zadanka,org.example,Main,71,0,0,0,16,0,2,0,2,0
+zadanka,org.example,Shape,0,3,0,0,0,1,0,1,0,1
+zadanka,org.example,ShapeList,0,21,0,0,0,9,0,4,0,4

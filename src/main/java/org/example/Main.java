@@ -1,5 +1,6 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.services.ShapeService;
 import org.example.shapes.Circle;
 import org.example.shapes.Rectangle;
@@ -11,7 +12,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        ShapeService shapeService = new ShapeService();
+        ObjectMapper objectMapper = new ObjectMapper();
+        ShapeService shapeService = new ShapeService(objectMapper);
 
         List<Shape> shapes = new ArrayList<>();
         shapes.add(new Square(4));
