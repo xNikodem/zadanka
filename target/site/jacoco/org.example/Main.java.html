@@ -5,30 +5,40 @@ import org.example.shapes.Circle;
 import org.example.shapes.Rectangle;
 import org.example.shapes.Square;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="nc" id="L11">public class Main {</span>
+<span class="nc" id="L12">public class Main {</span>
 
     public static void main(String[] args) {
-<span class="nc" id="L14">        ShapeService shapeService = new ShapeService();</span>
+<span class="nc" id="L15">        ShapeService shapeService = new ShapeService();</span>
 
-<span class="nc" id="L16">        List&lt;Shape&gt; shapes = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L17">        shapes.add(new Square(4));</span>
-<span class="nc" id="L18">        shapes.add(new Rectangle(5, 3));</span>
-<span class="nc" id="L19">        shapes.add(new Circle(2));</span>
+<span class="nc" id="L17">        List&lt;Shape&gt; shapes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L18">        shapes.add(new Square(4));</span>
+<span class="nc" id="L19">        shapes.add(new Rectangle(5, 3));</span>
+<span class="nc" id="L20">        shapes.add(new Circle(2));</span>
 
-<span class="nc" id="L21">        Shape largestAreaShape = shapeService.findShapeWithLargestArea(shapes);</span>
-<span class="nc" id="L22">        System.out.println(&quot;Shape with the largest area: &quot; + largestAreaShape);</span>
+<span class="nc" id="L22">        Shape largestAreaShape = shapeService.findShapeWithLargestArea(shapes);</span>
+<span class="nc" id="L23">        System.out.println(&quot;Shape with the largest area: &quot; + largestAreaShape);</span>
 
-<span class="nc" id="L24">        Shape largestPerimeterRectangle = shapeService.findShapeWithLargestPerimeter(shapes, Rectangle.class);</span>
-<span class="nc" id="L25">        System.out.println(&quot;Rectangle with the largest perimeter: &quot; + largestPerimeterRectangle);</span>
+<span class="nc" id="L25">        Shape largestPerimeterRectangle = shapeService.findShapeWithLargestPerimeter(shapes, Rectangle.class);</span>
+<span class="nc" id="L26">        System.out.println(&quot;Rectangle with the largest perimeter: &quot; + largestPerimeterRectangle);</span>
 
-<span class="nc" id="L27">        String path = &quot;shapes.json&quot;;</span>
-<span class="nc" id="L28">        shapeService.exportShapesToJson(shapes, path);</span>
+<span class="nc" id="L28">        String path = &quot;shapes.json&quot;;</span>
+        try {
+<span class="nc" id="L30">            shapeService.exportShapesToJson(shapes, path);</span>
+<span class="nc" id="L31">        } catch (IOException e) {</span>
+<span class="nc" id="L32">            throw new RuntimeException(e);</span>
+<span class="nc" id="L33">        }</span>
 
-<span class="nc" id="L30">        List&lt;Shape&gt; importedShapes = shapeService.importShapesFromJson(path);</span>
-<span class="nc" id="L31">        System.out.println(&quot;Imported shapes: &quot; + importedShapes);</span>
-<span class="nc" id="L32">    }</span>
+<span class="nc" id="L35">        List&lt;Shape&gt; importedShapes = null;</span>
+        try {
+<span class="nc" id="L37">            importedShapes = shapeService.importShapesFromJson(path);</span>
+<span class="nc" id="L38">        } catch (IOException e) {</span>
+<span class="nc" id="L39">            throw new RuntimeException(e);</span>
+<span class="nc" id="L40">        }</span>
+<span class="nc" id="L41">        System.out.println(&quot;Imported shapes: &quot; + importedShapes);</span>
+<span class="nc" id="L42">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

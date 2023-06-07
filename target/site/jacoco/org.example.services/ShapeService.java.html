@@ -32,22 +32,23 @@ public class ShapeService {
 <span class="fc" id="L32">                .orElse(null);</span>
     }
 
-    public void exportShapesToJson(List&lt;Shape&gt; shapes, String path) {
+    public void exportShapesToJson(List&lt;Shape&gt; shapes, String path) throws IOException {
         try {
 <span class="fc" id="L37">            CollectionLikeType type= mapper.getTypeFactory().constructCollectionType(List.class,Shape.class);</span>
 <span class="fc" id="L38">            mapper.writerFor(type).writeValue(new File(path),shapes);</span>
-<span class="nc" id="L39">        } catch (IOException e) {</span>
-<span class="nc" id="L40">            System.out.println(&quot;Error writing JSON: &quot; + e.getMessage());</span>
-<span class="fc" id="L41">        }</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L39">        } catch (IOException e) {</span>
+<span class="fc" id="L40">            System.err.println(&quot;Error writing JSON: &quot; + e.getMessage());</span>
+<span class="fc" id="L41">            throw e;</span>
+<span class="fc" id="L42">        }</span>
+<span class="fc" id="L43">    }</span>
 
-    public List&lt;Shape&gt; importShapesFromJson(String path) {
+    public List&lt;Shape&gt; importShapesFromJson(String path) throws IOException {
         try {
-<span class="fc" id="L46">            CollectionLikeType type = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Shape.class);</span>
-<span class="fc" id="L47">            return mapper.readValue(new File(path), type);</span>
-<span class="nc" id="L48">        } catch (IOException e) {</span>
-<span class="nc" id="L49">            System.out.println(&quot;Error reading JSON: &quot; + e.getMessage());</span>
-<span class="nc" id="L50">            return new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L47">            CollectionLikeType type = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Shape.class);</span>
+<span class="fc" id="L48">            return mapper.readValue(new File(path), type);</span>
+<span class="fc" id="L49">        } catch (IOException e) {</span>
+<span class="fc" id="L50">            System.err.println(&quot;Error reading JSON: &quot; + e.getMessage());</span>
+<span class="fc" id="L51">            throw e;</span>
         }
     }
 

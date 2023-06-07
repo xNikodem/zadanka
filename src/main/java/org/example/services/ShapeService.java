@@ -32,22 +32,23 @@ public class ShapeService {
                 .orElse(null);
     }
 
-    public void exportShapesToJson(List<Shape> shapes, String path) {
+    public void exportShapesToJson(List<Shape> shapes, String path) throws IOException {
         try {
             CollectionLikeType type= mapper.getTypeFactory().constructCollectionType(List.class,Shape.class);
             mapper.writerFor(type).writeValue(new File(path),shapes);
         } catch (IOException e) {
-            System.out.println("Error writing JSON: " + e.getMessage());
+            System.err.println("Error writing JSON: " + e.getMessage());
+            throw e;
         }
     }
 
-    public List<Shape> importShapesFromJson(String path) {
+    public List<Shape> importShapesFromJson(String path) throws IOException {
         try {
             CollectionLikeType type = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Shape.class);
             return mapper.readValue(new File(path), type);
         } catch (IOException e) {
-            System.out.println("Error reading JSON: " + e.getMessage());
-            return new ArrayList<>();
+            System.err.println("Error reading JSON: " + e.getMessage());
+            throw e;
         }
     }
 

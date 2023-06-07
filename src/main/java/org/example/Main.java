@@ -5,6 +5,7 @@ import org.example.shapes.Circle;
 import org.example.shapes.Rectangle;
 import org.example.shapes.Square;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +26,18 @@ public class Main {
         System.out.println("Rectangle with the largest perimeter: " + largestPerimeterRectangle);
 
         String path = "shapes.json";
-        shapeService.exportShapesToJson(shapes, path);
+        try {
+            shapeService.exportShapesToJson(shapes, path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        List<Shape> importedShapes = shapeService.importShapesFromJson(path);
+        List<Shape> importedShapes = null;
+        try {
+            importedShapes = shapeService.importShapesFromJson(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("Imported shapes: " + importedShapes);
     }
 }

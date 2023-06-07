@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,7 +55,7 @@ class ShapeServiceTest {
     }
 
     @Test
-    public void testExportShapesToJson() {
+    public void testExportShapesToJson() throws IOException {
         Rectangle rect = new Rectangle(3, 4);
         Square square = new Square(4);
         Circle circle = new Circle(3);
@@ -67,9 +68,27 @@ class ShapeServiceTest {
     }
 
     @Test
-    public void testImportShapesFromJson() {
+    public void testImportShapesFromJson() throws IOException {
         String path = "shapes.json";
         List<Shape> shapes = shapeService.importShapesFromJson(path);
         assertFalse(shapes.isEmpty());
     }
+    @Test
+    public void testImportShapesFromJson_ThrowsException_WhenFileNotFound() {
+        String wrongPath = "wrong_path.json";
+        assertThrows(IOException.class, () -> shapeService.importShapesFromJson(wrongPath));
+    }
+
+    @Test
+    public void testExportShapesToJson_ThrowsException_WhenFileUnreachable() {
+        Rectangle rect = new Rectangle(3, 4);
+        Square square = new Square(4);
+        Circle circle = new Circle(3);
+        List<Shape> shapes = Arrays.asList(rect, square, circle);
+        String unreachablePath = "/unreachable_path/shapes.json";
+
+        assertThrows(IOException.class, () -> shapeService.exportShapesToJson(shapes, unreachablePath));
+    }
+
+
 }
