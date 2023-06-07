@@ -16,5 +16,6 @@ public class CircleTest {
         Circle circle = new Circle(5);
         Assert.assertEquals(31.42, circle.getPerimeter(), 0.01);
     }
+
 }
 

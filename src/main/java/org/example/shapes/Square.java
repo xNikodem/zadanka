@@ -1,19 +1,14 @@
 package org.example.shapes;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.example.Shape;
 
-@JsonTypeName("square")
 public class Square extends Shape {
     private double side;
 
     public Square() {
     }
 
-    @JsonCreator
-    public Square(@JsonProperty("side") double side) {
+    public Square(double side) {
         this.side = side;
     }
 

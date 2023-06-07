@@ -1,6 +1,5 @@
 package org.example;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.services.ShapeService;
 import org.example.shapes.Circle;
 import org.example.shapes.Rectangle;
@@ -12,8 +11,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ShapeService shapeService = new ShapeService(objectMapper);
+        ShapeService shapeService = new ShapeService();
 
         List<Shape> shapes = new ArrayList<>();
         shapes.add(new Square(4));
@@ -23,7 +21,7 @@ public class Main {
         Shape largestAreaShape = shapeService.findShapeWithLargestArea(shapes);
         System.out.println("Shape with the largest area: " + largestAreaShape);
 
-        Rectangle largestPerimeterRectangle = shapeService.findShapeWithLargestPerimeter(shapes, Rectangle.class);
+        Shape largestPerimeterRectangle = shapeService.findShapeWithLargestPerimeter(shapes, Rectangle.class);
         System.out.println("Rectangle with the largest perimeter: " + largestPerimeterRectangle);
 
         String path = "shapes.json";

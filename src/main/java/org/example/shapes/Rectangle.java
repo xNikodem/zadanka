@@ -1,11 +1,7 @@
 package org.example.shapes;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.example.Shape;
 
-@JsonTypeName("rectangle")
 public class Rectangle extends Shape {
     private double length;
     private double width;
@@ -13,8 +9,7 @@ public class Rectangle extends Shape {
     public Rectangle() {
     }
 
-    @JsonCreator
-    public Rectangle(@JsonProperty("length") double length, @JsonProperty("width") double width) {
+    public Rectangle(double length,double width) {
         this.length = length;
         this.width = width;
     }

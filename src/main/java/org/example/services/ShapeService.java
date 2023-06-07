@@ -1,10 +1,10 @@
 package org.example.services;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.example.Shape;
-import org.example.ShapeList;
+import org.example.serialization.ShapeDeserializer;
+import org.example.serialization.ShapeSerializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,40 +15,38 @@ import java.util.List;
 public class ShapeService {
     private final ObjectMapper mapper;
 
-    public ShapeService(ObjectMapper mapper) {
-        this.mapper = mapper;
+    public ShapeService() {
+        this.mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.activateDefaultTypingAsProperty(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, "@type");
+
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Shape.class, new ShapeSerializer());
+        module.addDeserializer(Shape.class, new ShapeDeserializer());
+        mapper.registerModule(module);
     }
+
     public Shape findShapeWithLargestArea(List<Shape> shapes) {
         return shapes.stream().max(Comparator.comparing(Shape::getArea)).orElse(null);
     }
 
-    public <T extends Shape> T findShapeWithLargestPerimeter(List<Shape> shapes, Class<T> type) {
+    public Shape findShapeWithLargestPerimeter(List<Shape> shapes, Class<? extends Shape> type) {
         return shapes.stream()
                 .filter(type::isInstance)
                 .max(Comparator.comparing(Shape::getPerimeter))
-                .map(type::cast)
                 .orElse(null);
     }
 
     public void exportShapesToJson(List<Shape> shapes, String path) {
-        ShapeList shapeList = new ShapeList(shapes);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.activateDefaultTypingAsProperty(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, "@type");
         try {
-            mapper.writeValue(new File(path), shapeList);
+            mapper.writeValue(new File(path), shapes);
         } catch (IOException e) {
             System.out.println("Error writing JSON: " + e.getMessage());
         }
     }
 
     public List<Shape> importShapesFromJson(String path) {
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.activateDefaultTypingAsProperty(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, "@type");
         try {
-            ShapeList shapeList = mapper.readValue(new File(path), ShapeList.class);
-            return shapeList.getShapes();
+            return mapper.readValue(new File(path), mapper.getTypeFactory().constructCollectionType(List.class, Shape.class));
         } catch (IOException e) {
             System.out.println("Error reading JSON: " + e.getMessage());
             return new ArrayList<>();

@@ -1,39 +1,37 @@
 package org.example.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.example.Shape;
 import org.example.shapes.Rectangle;
 import org.example.shapes.Square;
 import org.example.shapes.Circle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 class ShapeServiceTest {
     private ShapeService shapeService;
-    private ObjectMapper mapper;
 
     @BeforeEach
     public void setUp() {
-        mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.activateDefaultTypingAsProperty(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL, "@type");
-        shapeService = new ShapeService(mapper);
+        shapeService = new ShapeService();
     }
 
     @Test
     public void testFindShapeWithLargestArea() {
-        Rectangle rect = new Rectangle(3, 4); // area = 12
-        Square square = new Square(4); // area = 16
-        Circle circle = new Circle(3); // area = 28.27
+        Shape rect = Mockito.mock(Rectangle.class);
+        when(rect.getArea()).thenReturn(12.0);
+        Shape square = Mockito.mock(Square.class);
+        when(square.getArea()).thenReturn(16.0);
+        Shape circle = Mockito.mock(Circle.class);
+        when(circle.getArea()).thenReturn(28.27);
+
         List<Shape> shapes = Arrays.asList(rect, square, circle);
 
         Shape largestShape = shapeService.findShapeWithLargestArea(shapes);
@@ -42,9 +40,13 @@ class ShapeServiceTest {
 
     @Test
     public void testFindShapeWithLargestPerimeter() {
-        Rectangle rect = new Rectangle(3, 4); // perimeter = 14
-        Square square = new Square(4); // perimeter = 16
-        Circle circle = new Circle(3); // perimeter = 18.85
+        Shape rect = Mockito.mock(Rectangle.class);
+        when(rect.getPerimeter()).thenReturn(14.0);
+        Shape square = Mockito.mock(Square.class);
+        when(square.getPerimeter()).thenReturn(16.0);
+        Shape circle = Mockito.mock(Circle.class);
+        when(circle.getPerimeter()).thenReturn(18.85);
+
         List<Shape> shapes = Arrays.asList(rect, square, circle);
 
         Shape largestShape = shapeService.findShapeWithLargestPerimeter(shapes, Circle.class);
@@ -52,7 +54,7 @@ class ShapeServiceTest {
     }
 
     @Test
-    public void testExportShapesToJson() throws IOException {
+    public void testExportShapesToJson() {
         Rectangle rect = new Rectangle(3, 4);
         Square square = new Square(4);
         Circle circle = new Circle(3);
@@ -65,7 +67,7 @@ class ShapeServiceTest {
     }
 
     @Test
-    public void testImportShapesFromJson() throws IOException {
+    public void testImportShapesFromJson() {
         String path = "shapes.json";
         List<Shape> shapes = shapeService.importShapesFromJson(path);
         assertFalse(shapes.isEmpty());
