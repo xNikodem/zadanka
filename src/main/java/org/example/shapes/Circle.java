@@ -1,11 +1,21 @@
 package org.example.shapes;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import org.example.Shape;
 
+@JsonTypeName("circle")
 public class Circle extends Shape {
-    private final double radius;
 
-    public Circle(double radius) {
+    private double radius;
+
+    public Circle() {
+    }
+
+    @JsonCreator
+    public Circle(@JsonProperty("radius") double radius) {
         this.radius = radius;
     }
 
@@ -13,12 +23,18 @@ public class Circle extends Shape {
         return radius;
     }
 
-    @Override
-    public double getArea() {
-        return Math.PI * Math.pow(radius, 2);
+    public void setRadius(double radius) {
+        this.radius = radius;
     }
 
     @Override
+    @JsonIgnore
+    public double getArea() {
+        return Math.PI * radius * radius;
+    }
+
+    @Override
+    @JsonIgnore
     public double getPerimeter() {
         return 2 * Math.PI * radius;
     }
@@ -27,7 +43,8 @@ public class Circle extends Shape {
     public String toString() {
         return "{" +
                 "type=" + Circle.class.getSimpleName()+
-                ", radius=" +radius+
+                ", radius=" + radius +
                 '}';
     }
 }
+

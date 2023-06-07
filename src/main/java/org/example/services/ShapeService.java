@@ -1,13 +1,14 @@
 package org.example.services;
 
 import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import org.example.Shape;
-import org.example.serialization.ShapeDeserializer;
-import org.example.serialization.ShapeSerializer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,13 +18,8 @@ public class ShapeService {
 
     public ShapeService() {
         this.mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        SimpleModule module = new SimpleModule();
-        module.addSerializer(Shape.class, new ShapeSerializer());
-        module.addDeserializer(Shape.class, new ShapeDeserializer());
-        mapper.registerModule(module);
     }
+
 
     public Shape findShapeWithLargestArea(List<Shape> shapes) {
         return shapes.stream().max(Comparator.comparing(Shape::getArea)).orElse(null);
@@ -38,7 +34,8 @@ public class ShapeService {
 
     public void exportShapesToJson(List<Shape> shapes, String path) {
         try {
-            mapper.writeValue(new File(path), shapes);
+            CollectionLikeType type= mapper.getTypeFactory().constructCollectionType(List.class,Shape.class);
+            mapper.writerFor(type).writeValue(new File(path),shapes);
         } catch (IOException e) {
             System.out.println("Error writing JSON: " + e.getMessage());
         }
@@ -46,10 +43,12 @@ public class ShapeService {
 
     public List<Shape> importShapesFromJson(String path) {
         try {
-            return mapper.readValue(new File(path), mapper.getTypeFactory().constructCollectionType(List.class, Shape.class));
+            CollectionLikeType type = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Shape.class);
+            return mapper.readValue(new File(path), type);
         } catch (IOException e) {
             System.out.println("Error reading JSON: " + e.getMessage());
             return new ArrayList<>();
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package org.example.shapes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.example.Shape;
 
 public class Rectangle extends Shape {
@@ -31,11 +32,13 @@ public class Rectangle extends Shape {
     }
 
     @Override
+    @JsonIgnore
     public double getArea() {
         return length * width;
     }
 
     @Override
+    @JsonIgnore
     public double getPerimeter() {
         return 2 * (length + width);
     }
