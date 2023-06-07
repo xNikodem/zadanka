@@ -1,9 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-zadanka,org.example.services,ShapeService,16,86,0,0,5,17,0,5,0,5
-zadanka,org.example.shapes,Circle,18,9,0,0,4,4,3,2,3,2
+zadanka,org.example.services,ShapeService,16,68,0,0,5,14,0,5,0,5
+zadanka,org.example.shapes,Circle,26,9,0,0,8,4,5,2,5,2
 zadanka,org.example.shapes,Square,24,9,0,0,8,4,5,2,5,2
-zadanka,org.example.shapes,Rectangle,33,15,0,0,10,6,6,3,6,3
-zadanka,org.example.serialization,ShapeSerializer,0,54,1,5,0,12,1,4,0,2
-zadanka,org.example.serialization,ShapeDeserializer,6,51,1,3,1,7,1,4,0,2
+zadanka,org.example.shapes,Rectangle,22,26,0,0,4,12,3,6,3,6
 zadanka,org.example,Main,65,0,0,0,15,0,2,0,2,0
 zadanka,org.example,Shape,0,3,0,0,0,1,0,1,0,1
